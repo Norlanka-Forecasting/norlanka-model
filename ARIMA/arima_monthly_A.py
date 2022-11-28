@@ -18,19 +18,20 @@ from sklearn.metrics import accuracy_score
 import pickle
 
 # Import as Dataframe and converted to a series because specifying the index column.
-df = pd.read_csv('Datasets/DataSheet.csv')
+df = pd.read_csv('Datasets/DataSheet.csv',parse_dates=['month year'])
 df.head()
 
 
 
-# df['Date'] = df['Date'].dt.to_period('M')
-# df = df.set_index('Date')
-# df.index= df.index.strftime('%Y-%m')
-# # Create Training and Test
-# train = df.Price[:29]
-# test = df.Price[28:]
-# df.plot()
-#
+df['month year'] = df['month year'].dt.to_period('M')
+df = df.set_index('month year')
+df.index= df.index.strftime('%Y-%m')
+
+# Create Training and Test
+train = df.Price[:29]
+test = df.Price[28:]
+df.plot()
+
 # # Build Model
 # model = ARIMA(train, order=(0,1,0))
 # #model = ARIMA(train, order=(1, 1, 1))
