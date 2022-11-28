@@ -9,6 +9,7 @@ from statsmodels.tsa.stattools import adfuller
 from numpy import log
 import numpy as np, pandas as pd
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.tsa.arima_model import ARIMA   
@@ -26,17 +27,37 @@ df.head()
 df['month year'] = df['month year'].dt.to_period('M')
 df = df.set_index('month year')
 df.index= df.index.strftime('%Y-%m')
+df['OTIF'] = df['OTIF'].fillna(df['OTIF'].mean(), inplace=False)
+df['OTIF'] = np.round(df['OTIF'], decimals = 2)
+
+df['Embelishment Cost'] = df['Embelishment Cost'].fillna(df['Embelishment Cost'].mean(), inplace=False)
+df['Embelishment Cost'] = np.round(df['Embelishment Cost'], decimals = 2)
+
+df['Sales'] = (df['Sales'] - df['Sales'].min()) / (df['Sales'].max() - df['Sales'].min())
+df['Sales'] = np.round(df['Sales'], decimals = 2) 
+df['Pcs / Pk'] = (df['Pcs / Pk'] - df['Pcs / Pk'].min()) / (df['Pcs / Pk'].max() - df['Pcs / Pk'].min()) 
+df['Pcs / Pk'] = np.round(df['Pcs / Pk'], decimals = 2)
+df['UnitPrice'] = (df['UnitPrice'] - df['UnitPrice'].min()) / (df['UnitPrice'].max() - df['UnitPrice'].min()) 
+df['UnitPrice'] = np.round(df['UnitPrice'], decimals = 2)
+df['OTIF'] = (df['OTIF'] - df['OTIF'].min()) / (df['OTIF'].max() - df['OTIF'].min()) 
+df['OTIF'] = np.round(df['OTIF'], decimals = 2)
+df['Embelishment Cost'] = (df['Embelishment Cost'] - df['Embelishment Cost'].min()) / (df['Embelishment Cost'].max() - df['Embelishment Cost'].min()) 
+df['Embelishment Cost'] = np.round(df['Embelishment Cost'], decimals = 2)
+
+
 
 # Create Training and Test
-train = df.Price[:29]
-test = df.Price[28:]
+train = df.Sales[:292]
+test = df.Sales[293:]
 df.plot()
 
-# # Build Model
-# model = ARIMA(train, order=(0,1,0))
-# #model = ARIMA(train, order=(1, 1, 1))
-# fitted = model.fit(disp=-1)
-# print(fitted.summary())
+
+
+# Build Model
+model = ARIMA(train, order=(0,1,0))
+model = ARIMA(train, order=(1, 1, 1))
+fitted = model.fit(disp=-1)
+print(fitted.summary())
 #
 #
 # min_month = "2022-05-01"
