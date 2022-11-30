@@ -53,7 +53,7 @@ train_features, test_features, train_labels, test_labels = train_test_split(
 
 # Model
 # RandomForestRegressor
-random_forest_reg = RandomForestRegressor(n_estimators=1800, random_state=10)
+random_forest_reg = RandomForestRegressor(n_estimators=4435, random_state=10)
 random_forest_reg.fit(train_features, train_labels)
 y_pred = random_forest_reg.predict(test_features)
 error = np.sqrt(mean_squared_error(test_labels, y_pred))
