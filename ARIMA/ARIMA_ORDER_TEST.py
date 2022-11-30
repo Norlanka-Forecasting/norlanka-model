@@ -7,27 +7,27 @@ import pandas as pd
 from pmdarima.arima.utils import ndiffs
 from statsmodels.tsa.arima_model import ARIMA   
 # Import as Dataframe and converted to a series because specifying the index column.
-df = pd.read_csv('./Datasets/C_datasets/C_dataset_monthly_original.csv', parse_dates=['Date'], index_col='Date')
+df = pd.read_csv('Datasets/DataSheet.csv', parse_dates=['month year'], index_col='month year')
 df.head()
 
 
 
 #Check for Staionary
-result = adfuller(df.Price.dropna())
+result = adfuller(df.Sales.dropna())
 print('ADF Statistic: %f' % result[0])
 print('p-value: %f' % result[1])
 
 plt.rcParams.update({'figure.figsize':(9,7), 'figure.dpi':120})
 # Original Series
 fig, axes = plt.subplots(3, 2, sharex=True)
-axes[0, 0].plot(df.Price); axes[0, 0].set_title('Original Series')
-plot_acf(df.Price, ax=axes[0, 1])
+axes[0, 0].plot(df.Sales); axes[0, 0].set_title('Original Series')
+plot_acf(df.Sales, ax=axes[0, 1])
 
 # 1st Differencing
-data_difference_1 = df.Price.diff()
-axes[1, 0].plot(df.Price.diff()); axes[1, 0].set_title('1st Order Differencing')
+data_difference_1 = df.Sales.diff()
+axes[1, 0].plot(df.Sales.diff()); axes[1, 0].set_title('1st Order Differencing')
 plot_acf(df.Price.diff().dropna(), ax=axes[1, 1])
-result = adfuller(data_difference_1['Price'].dropna())
+result = adfuller(data_difference_1['Sales'].dropna())
 print('ADF Statistic: %f' % result[0])
 print('p-value: %f' % result[1])
 
@@ -176,7 +176,7 @@ import pmdarima as pm
 
 #kf = pd.read_csv('https://raw.githubusercontent.com/selva86/datasets/master/wwwusage.csv', names=['value'], header=0)
 
-model = pm.auto_arima(df.Price, start_p=1, start_q=1,
+model = pm.auto_arima(df.Sales, start_p=1, start_q=1,
                       test='adf',       # use adftest to find optimal 'd'
                       max_p=3, max_q=3, # maximum p and q
                       m=1,              # frequency of series

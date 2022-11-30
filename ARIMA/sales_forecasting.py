@@ -17,29 +17,57 @@ import datetime
 from statsmodels.tsa.stattools import acf
 from sklearn.metrics import accuracy_score
 import pickle
+import pmdarima as pm
 
 # Import as Dataframe and converted to a series because specifying the index column.
 df = pd.read_csv('Datasets/DataSheet.csv',parse_dates=['month year'])
 df.head()
+df = df.set_index('month year')
+df = df.drop("OTIF", axis=1)
+df = df.drop("Pcs / Pk", axis=1)
+df = df.drop("UnitPrice", axis=1)
+df = df.drop("Embelishment Cost", axis=1)
 
 
 df = df.sort_values(by='month year',ascending=True)
-df['month year'] = df['month year'].dt.to_period('M')
-df = df.set_index('month year')
+df = df.resample('M').mean()
+#df,index = df.index.dt.to_period('M')
+
 df.index= df.index.strftime('%Y-%m')
+
+df['Sales'] = df['Sales'].fillna(df['Sales'].mean(), inplace=False)
+df['Sales'] = np.round(df['Sales'], decimals = 0)
+
+
+##Check Best Values
+modeltest = pm.auto_arima(df.Sales[:39], start_p=1, start_q=1,
+                      test='adf',       # use adftest to find optimal 'd'
+                      max_p=3, max_q=3, # maximum p and q
+                      m=1,              # frequency of series
+                      d=None,           # let model determine 'd'
+                      seasonal=False,   # No Seasonality
+                      start_P=0, 
+                      D=0, 
+                      trace=True,
+                      error_action='ignore',  
+                      suppress_warnings=True, 
+                      stepwise=True)
+
+print(modeltest.summary())
+
 
 
 
 
 # Create Training and Test
-train = df.Sales[:292]
-test = df.Sales[293:]
+train = df.Sales[:39]
+test = df.Sales[40:]
 df.plot()
 
 
 
 # Build Model
-model = ARIMA(train, order=(0,1,0))
+#model = ARIMA(train, order=(0,1,0))
 model = ARIMA(train, order=(1, 1, 1))
 fitted = model.fit(disp=-1)
 print(fitted.summary())
@@ -53,7 +81,7 @@ months = months.strftime('%Y-%m')
 
 
 # Forecast
-fc, se, conf = fitted.forecast(227, alpha=0.05)  # 95% conf
+fc, se, conf = fitted.forecast(143, alpha=0.05)  # 95% conf
 
 test_indexes = test.index
 combined = test_indexes.union(months)
@@ -93,13 +121,24 @@ plt.show()
 
 
 #save model
-fitted.save('sales_forecasting.pkl')
+# =============================================================================
+# fitted.save('sales_forecasting.pkl')
+# data = {
+#         "model": fitted,
+#         "forecast_series": fc_series,
+#         }
+# 
+# with open('market_A_model.pkl', 'wb') as file:
+#     pickle.dump(data, file)
+# =============================================================================
+    
+# save model
 data = {
-        "model": fitted,
+        #"model": fitted,
         "forecast_series": fc_series,
         }
 
-with open('market_A_model.pkl', 'wb') as file:
+with open('sales_forecasting.pkl', 'wb') as file:
     pickle.dump(data, file)
 from statsmodels.tsa.arima_model import ARIMAResults
 # load model
