@@ -28,10 +28,10 @@ def get_sales():
 
 @app.route('/predictSales', methods=['GET'])
 def predict_sales():
-    Pcs_Pk = request.headers.get('pcsPk')
-    UnitPrice = request.headers.get('unitPrice')
-    OTIF = request.headers.get('otif')
-    Embelishment_Cost = request.headers.get('embelishmentCost')
+    Pcs_Pk = request.args.get('pcsPk')
+    UnitPrice = request.args.get('unitPrice')
+    OTIF = request.args.get('otif')
+    Embelishment_Cost = request.args.get('embelishmentCost')
 
     # Define the array with all input parameters
     inputs = np.array([[Pcs_Pk, UnitPrice, OTIF,
