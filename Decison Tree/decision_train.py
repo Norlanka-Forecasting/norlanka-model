@@ -9,6 +9,7 @@ from sklearn.metrics import explained_variance_score
 from sklearn.metrics import r2_score
 import pickle
 import pandas as pd
+from sklearn.tree import DecisionTreeRegressor
 
 from sklearn.preprocessing import MinMaxScaler
 # Get the referance for the data frame
@@ -29,13 +30,6 @@ df['Embelishment Cost'] = np.round(df['Embelishment Cost'], decimals = 2)
 # df['Sales'] = np.round(df['Sales'], decimals = 2) 
 # =============================================================================
 
-scaler = MinMaxScaler()
-scaled_values = scaler.fit_transform(df.values)
-unscaled_values = scaler.inverse_transform(scaled_values)
-df['Sales'] = scaled_values[:,1]
-df['OTIF'] = scaled_values[:,1]
-df['Embelishment Cost'] = scaled_values[:,1]
-df['Pcs / Pk'] = scaled_values[:,1]
 
 
 
@@ -60,31 +54,33 @@ train_features, test_features, train_labels, test_labels = train_test_split(
 
 # Model
 # RandomForestRegressor
-random_forest_reg = RandomForestRegressor(n_estimators=1800, random_state=10)
-random_forest_reg.fit(train_features, train_labels)
-y_pred = random_forest_reg.predict(test_features)
-error = np.sqrt(mean_squared_error(test_labels, y_pred))
-print("mean_squared_error : ${:,.02f}".format(error))
-print("mean_absolute_percentage_error : ",
-      mean_absolute_percentage_error(test_labels, y_pred))
-print("max_error : ", max_error(test_labels, y_pred))
-print("explained_variance_score : ",
-      explained_variance_score(test_labels, y_pred))
-print("mean_absolute_error : ", mean_absolute_error(test_labels, y_pred))
-print("Score (R2): ", random_forest_reg.score(test_features, test_labels))
-print("Score (R2): ", r2_score(test_labels, y_pred))
+
+dec_tree_reg = DecisionTreeRegressor(random_state=0)
+dec_tree_reg.fit(train_features, train_labels)          # Train the model
+y_pred = dec_tree_reg.predict(test_features)        # Predict the model with testing data
+
+    
+## Evaluate the model's performance
+print(" ")
+print("Accuracy measures of Decision Tree Regression")
+print(" ")
+print("explained_variance_score : ",explained_variance_score(test_labels, y_pred))
+print("Score (R2): ",r2_score(test_labels, y_pred))
+
+# Calculate root mean square value  
+error = np.sqrt(mean_squared_error(test_labels, y_pred))     
+print("Root mean_squared_error : ${:,.02f}".format(error))
 
 # Assigning the meadian values for other independent variables
-Pcs_Pk = 7
-UnitPrice = 5.96
-OTIF = 0.78
-Embelishment_Cost = 0.15
+Pcs_Pk = 103.0
+UnitPrice = 1000.0
+OTIF = 36989.5
+Embelishment_Cost = 628.5
 
 # Define the array with all input parameters
 inputs = np.array([[Pcs_Pk, UnitPrice, OTIF,
                Embelishment_Cost]])
 inputs = inputs.astype(float)
-inputs_scaled_values = scaler.fit_transform(inputs)
 
 # Make the prediction
 gross = random_forest_reg.predict(inputs)
