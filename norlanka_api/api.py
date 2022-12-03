@@ -14,20 +14,24 @@ def home():
 
 @app.route('/getSales', methods=['GET'])
 def get_sales():
-    month = request.headers.get('month')
+    month = request.args.get('month')
+    print(month)
     # load model
     with open('sales_forecasting.pkl', 'rb') as file:
         dataLoaded = pickle.load(file)
     fc_series = dataLoaded['forecast_series']
     Sales = round(fc_series.get(key=month))
-    return str(Sales)
+
+    resp = flask.Response(str(Sales))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 @app.route('/predictSales', methods=['GET'])
 def predict_sales():
-    Pcs_Pk = request.headers.get('pcsPk')
-    UnitPrice = request.headers.get('unitPrice')
-    OTIF = request.headers.get('otif')
-    Embelishment_Cost = request.headers.get('embelishmentCost')
+    Pcs_Pk = request.args.get('pcsPk')
+    UnitPrice = request.args.get('unitPrice')
+    OTIF = request.args.get('otif')
+    Embelishment_Cost = request.args.get('embelishmentCost')
 
     # Define the array with all input parameters
     inputs = np.array([[Pcs_Pk, UnitPrice, OTIF,
@@ -41,6 +45,9 @@ def predict_sales():
     # Make the prediction
     gross = random_forest_reg.predict(inputs)
     print("Predicted Sales : ", round(gross[0]))
-    return str(round(gross[0]))
 
-app.run(debug=False, host='192.168.8.118', port=5000)
+    resp = flask.Response(str(round(gross[0])))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
+app.run(debug=False, host='127.0.0.1', port=5000)
