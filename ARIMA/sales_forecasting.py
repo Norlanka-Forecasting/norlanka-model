@@ -30,7 +30,7 @@ df = df.drop("Embelishment Cost", axis=1)
 
 
 df = df.sort_values(by='month year',ascending=True)
-df = df.resample('M').mean()
+df = df.resample('M').sum()
 #df,index = df.index.dt.to_period('M')
 
 df.index= df.index.strftime('%Y-%m')

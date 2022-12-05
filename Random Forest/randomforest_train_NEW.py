@@ -17,9 +17,12 @@ df = pd.read_csv('Datasets/DataSheet.csv', parse_dates=['month year'])
 df.head()
 
 df = df.drop("month year", axis=1)
+df = df.drop("OTIF", axis=1)
 
-df['OTIF'] = df['OTIF'].fillna(df['OTIF'].mean(), inplace=False)
-df['OTIF'] = np.round(df['OTIF'], decimals = 2)
+# =============================================================================
+# df['OTIF'] = df['OTIF'].fillna(df['OTIF'].mean(), inplace=False)
+# df['OTIF'] = np.round(df['OTIF'], decimals = 2)
+# =============================================================================
 
 df['Embelishment Cost'] = df['Embelishment Cost'].fillna(df['Embelishment Cost'].mean(), inplace=False)
 df['Embelishment Cost'] = np.round(df['Embelishment Cost'], decimals = 2)
@@ -70,11 +73,10 @@ print("Score (R2): ", r2_score(test_labels, y_pred))
 # Assigning the meadian values for other independent variables
 Pcs_Pk = 103.0
 UnitPrice = 1000.0
-OTIF = 36989.5
 Embelishment_Cost = 628.5
 
 # Define the array with all input parameters
-inputs = np.array([[Pcs_Pk, UnitPrice, OTIF,
+inputs = np.array([[Pcs_Pk, UnitPrice,
                Embelishment_Cost]])
 inputs = inputs.astype(float)
 
