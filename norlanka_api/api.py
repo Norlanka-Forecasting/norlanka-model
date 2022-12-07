@@ -30,11 +30,10 @@ def get_sales():
 def predict_sales():
     Pcs_Pk = request.args.get('pcsPk')
     UnitPrice = request.args.get('unitPrice')
-    OTIF = request.args.get('otif')
     Embelishment_Cost = request.args.get('embelishmentCost')
 
     # Define the array with all input parameters
-    inputs = np.array([[Pcs_Pk, UnitPrice, OTIF,
+    inputs = np.array([[Pcs_Pk, UnitPrice,
                         Embelishment_Cost]])
     inputs = inputs.astype(float)
     # load model
