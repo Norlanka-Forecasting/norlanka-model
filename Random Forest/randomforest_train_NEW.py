@@ -18,14 +18,17 @@ df.head()
 
 df = df.drop("month year", axis=1)
 df = df.drop("OTIF", axis=1)
+df = df.drop("Embelishment Cost", axis=1)
 
 # =============================================================================
 # df['OTIF'] = df['OTIF'].fillna(df['OTIF'].mean(), inplace=False)
 # df['OTIF'] = np.round(df['OTIF'], decimals = 2)
 # =============================================================================
-
-df['Embelishment Cost'] = df['Embelishment Cost'].fillna(df['Embelishment Cost'].mean(), inplace=False)
-df['Embelishment Cost'] = np.round(df['Embelishment Cost'], decimals = 2)
+# =============================================================================
+# 
+# df['Embelishment Cost'] = df['Embelishment Cost'].fillna(df['Embelishment Cost'].mean(), inplace=False)
+# df['Embelishment Cost'] = np.round(df['Embelishment Cost'], decimals = 2)
+# =============================================================================
 
 # =============================================================================
 # df['Sales'] = (df['Sales'] - df['Sales'].min()) / (df['Sales'].max() - df['Sales'].min())
