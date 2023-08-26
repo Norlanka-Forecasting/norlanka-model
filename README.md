@@ -1,6 +1,6 @@
 # Norlanka Forecasting
 
-Welcome to the Norlanka Manufacturing Limited Employee Evaluation Project repository! This project serves as a comprehensive assessment tool for sales forecasting and prediction. Leveraging the power of Spring Boot, Angular 14, Python, and Firebase, this repository encapsulates a dynamic blend of technologies to deliver a robust solution.
+Welcome to the Norlanka Manufacturing Limited Employee Evaluation Project repository! This project serves as a comprehensive assessment tool for sales forecasting and prediction. Leveraging the power of Angular 14, Python, and Firebase, this repository encapsulates a dynamic blend of technologies to deliver a robust solution.
 
 ## Project Features
 
@@ -30,10 +30,9 @@ Welcome to the Norlanka Manufacturing Limited Employee Evaluation Project reposi
 
 ## Tools and Technologies 
 
-- Spring boot
 - Angular 14
 - Python (ARIMA, Random Forest)
 - Firebase
 
-This repository encapsulates the collaborative efforts of our talented developers, combining Spring Boot backend prowess, Angular 14 dynamic frontend, Python data science capabilities, Firbase data handling. The result is an innovative solution that empowers both employees and management to make data-driven decisions and contribute to the success of Norlanka Manufacturing Limited.
+This repository encapsulates the collaborative efforts of our talented developers, combining Angular 14 dynamic frontend, Python data science capabilities, Firbase data handling. The result is an innovative solution that empowers both employees and management to make data-driven decisions and contribute to the success of Norlanka Manufacturing Limited.
 
